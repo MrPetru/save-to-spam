@@ -24,7 +24,7 @@ class save_new_version(spamhelper.SaveToSpamHelper):
                 owner = result['owner']['user_name']
         if not owner or owner != self.logindata.name:
             print ('you don\'t own this asset')
-            return {'FINISHED'}
+            return 1 #{'FINISHED'}
         
         # create and submite all dependencies asset
         self.save_dependency_assets()

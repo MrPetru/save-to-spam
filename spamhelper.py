@@ -130,7 +130,8 @@ class SaveToSpamHelper():
             for img in collection:
                 img_name =img.original_path[img.original_path.rfind('/')+1:img.original_path.rfind('.')]
                 img_ext = img.original_path[img.original_path.rfind('.')+1:]
-                if img_name[-4:] == '_TEX':
+                if img_name[img_name.rfind('_'):] in ['_TEX', '_PLT', '_DRW', '_MDL', '_RIG',
+                            '_STB', '_PNT', '_AUD', '_LAY', '_ANI', '_FX', '_RND', '_CMP', '_PLN']:
                     continue
                 
                 # verifica se gia esiste il asset con questo nome
@@ -145,11 +146,10 @@ class SaveToSpamHelper():
                                 new_asset_id)
                 except:
                     asset_exist = False
-                    
                 if not asset_exist:
                     result = self.logindata.adminconn.asset.new(
-                                new_asset_path['project'], container_type, shot_id,
-                                'texture', img_name+'_TEX.'+img_ext )
+                                new_asset_path['project'], container_type, new_shot_id,
+                                'texture', new_asset_path['name'] )
                     #print (result)
                 result = self.logindata.conn.asset.checkout(
                             new_asset_path['project'], new_asset_id)

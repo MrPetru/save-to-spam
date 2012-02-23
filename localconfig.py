@@ -13,9 +13,12 @@ class credentiales():
 
     def __init__(self):
         """ get the curent user data from spamconfig fiel """
+        import os
         
         config = configparser.ConfigParser()
-        result = config.read('/home/scantlight/spamconfig.ini')
+        username = os.getenv('USER')
+        path_to_config = os.path.join('/home', username, 'spamconfig.ini')
+        result = config.read(path_to_config)
         if not sys.version_info[0] == 3:
             config = {'DEFAULT': dict(config.items('DEFAULT'))}
         if result == []:

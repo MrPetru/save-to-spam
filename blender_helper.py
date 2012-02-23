@@ -89,7 +89,7 @@ class image_collection(list):
     
     def __init__(self, images, main_file_path):
         for f in images:
-            if f.type == 'IMAGE':
+            if f.type == 'IMAGE' and not f.library and f.source != 'SEQUENCE':
                 import os
                 tmp = self.new_file_type(f, main_file_path)
                 if os.path.exists(tmp.absolute_path):

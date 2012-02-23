@@ -4,7 +4,6 @@ import SocketServer
 import sys
 import threading
 
-sys.path.append('/shared/apps/plugins/source')
 import localconfig
 
 class SpamLocalServer(SocketServer.BaseRequestHandler):

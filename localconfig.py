@@ -19,7 +19,7 @@ class credentiales():
         
         config = configparser.ConfigParser()
         username = os.getenv('USER')
-        path_to_config = os.path.join(shared_path, 'spamconfig.ini')
+        path_to_config = os.path.join(self.shared_path, 'spamconfig.ini')
         result = config.read(path_to_config)
         if not sys.version_info[0] == 3:
             config = {'DEFAULT': dict(config.items('DEFAULT'))}

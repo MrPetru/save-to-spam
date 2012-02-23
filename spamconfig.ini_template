@@ -1,0 +1,13 @@
+[DEFAULT]
+adminname = name
+adminpassword = pass
+host = http://spam.com:80 # where is the spam server
+repository = /workspace/spam_projects # where is the local repository of spam projects
+
+[FIRST_USER_NAME]
+username = name
+password = pass
+
+[SECOND_USER_NAME]
+username = name
+password = pass

@@ -51,6 +51,10 @@ class MultipartPostHandler(urllib.request.BaseHandler):
             return request
 
         files = [v for v in data.values() if isinstance(v, io.BufferedReader)]
+        if not files:
+            for v in data.values():
+                if isinstance(v, list):
+                    files = v
         if files:
             boundary, data = self.multipart_encode(iter(data.items()))
             contenttype = 'multipart/form-data; boundary=%s' % boundary
@@ -79,6 +83,20 @@ class MultipartPostHandler(urllib.request.BaseHandler):
                 buf.write(('Content-Length: %s\r\n' % file_size).encode('utf8'))
                 value.seek(0)
                 buf.write(b'\r\n' + value.read() + b'\r\n')
+            elif isinstance(value, list):
+                for f in value:
+                    if isinstance(f, io.BufferedReader):
+                        file_size = os.fstat(f.fileno())[stat.ST_SIZE]
+                        dirname, filename = os.path.split(f.name)
+                        contenttype = (mimetypes.guess_type(filename)[0] or
+                                                            'application/octet-stream')
+                        buf.write(('--%s\r\n' % boundary).encode('utf8'))
+                        buf.write(('Content-Disposition: form-data; name="%s"; '
+                                                'filename="%s"\r\n' % (key, filename)).encode('utf8'))
+                        buf.write(('Content-Type: %s\r\n' % contenttype).encode('utf8'))
+                        buf.write(('Content-Length: %s\r\n' % file_size).encode('utf8'))
+                        f.seek(0)
+                        buf.write('\r\n' + f.read() + '\r\n')
             else:
                 buf.write(('--%s\r\n' % boundary).encode('utf8'))
                 buf.write(('Content-Disposition: form-data; name="%s"' % key).encode('utf8'))

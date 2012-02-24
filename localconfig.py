@@ -22,7 +22,7 @@ class credentiales():
         path_to_config = os.path.join(self.shared_path, 'spamconfig.ini')
         result = config.read(path_to_config)
         if not sys.version_info[0] == 3:
-            config = {'DEFAULT': dict(config.items('DEFAULT'))}
+            config = {'DEFAULT': dict(config.items('DEFAULT')), username : dict(config.items(username))}
         if result == []:
             self.user = None
             self.paswd = None

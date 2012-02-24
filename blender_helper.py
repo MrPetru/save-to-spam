@@ -94,6 +94,14 @@ class image_collection(list):
                 tmp = self.new_file_type(f, main_file_path)
                 if os.path.exists(tmp.absolute_path):
                     self.append(tmp)
+            exist_sequences = False
+            if f.type == 'IMAGE' and not f.library and f.source == 'SEQUENCE':
+                print (f.filepath)
+                exist_sequences = True
+            if exist_sequences:
+                bpy.ops.spamerror.message('INVOKE_DEFAULT', 
+                    type = "Info:",
+                    message = 'Found some sequences, please check terminal.')
             
     def set_new_path(self, nft_img, new_location, base_file):
         # nft_img = new file type image

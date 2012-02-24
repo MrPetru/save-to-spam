@@ -229,6 +229,11 @@ class SaveToSpam(bpy.types.Operator, save_alt_version.save_alt_version,
     def execute(self, context):
         # check for user data
         
+#        bpy.ops.spamerror.message('INVOKE_DEFAULT', 
+#                type = "Error",
+#                message = 'Found one error!')
+#        return {'FINISHED'}
+        
         if self.logindata.name == None:
             return {'FINISHED'}
 
@@ -392,7 +397,30 @@ class SelectSubLibgr_OP(bpy.types.Operator):
     def execute(self, context):
         spam_data['selected_libgr'].append(self.sublib_data.split('_sep_'))
         return {'FINISHED'}
-                
+        
+class SpamMessageOperator(bpy.types.Operator):
+    bl_idname = "spamerror.message"
+    bl_label = "Message"
+    type = StringProperty()
+    message = StringProperty()
+ 
+    def execute(self, context):
+        self.report({'INFO'}, self.message)
+        print(self.message)
+        return {'FINISHED'}
+ 
+    def invoke(self, context, event):
+        wm = context.window_manager
+        return wm.invoke_popup(self, width=400, height=200)
+ 
+    def draw(self, context):
+        self.layout.label("A message from SPAM")
+        row = self.layout.split(0.25)
+        row.label(self.type)
+        row.label(self.message)
+        print (self.message)
+        row = self.layout.split(0.80)
+        row.label("")
 
 def menu_func(self, context):
     layout = self.layout
@@ -402,6 +430,7 @@ def menu_func(self, context):
 # Registration
 
 def register():
+    bpy.utils.register_class(SpamMessageOperator)
     bpy.utils.register_class(SelectProject_OP)
     bpy.utils.register_class(SelectScene_OP)
     bpy.utils.register_class(SelectShot_OP)

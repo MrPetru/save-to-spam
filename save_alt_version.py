@@ -1,4 +1,4 @@
-#import bpy
+import bpy
 
 from . import spamhelper
 
@@ -24,7 +24,9 @@ class save_alt_version(spamhelper.SaveToSpamHelper):
             if result['owner']['user_name']:
                 owner = result['owner']['user_name']
         if not owner or owner != self.logindata.name:
-            print ('you don\'t own this asset')
+            bpy.ops.spamerror.message('INVOKE_DEFAULT', 
+                type = "Error",
+                message = 'you don\'t own this asset!!')
             return {'FINISHED'}
             
         if sc_or_lib:
@@ -59,7 +61,9 @@ class save_alt_version(spamhelper.SaveToSpamHelper):
                         new_asset_path['project'], container_type, shot_id,
                         new_asset_path['category'], new_asset_path['name'], comment=self.comment )
         else:
-            print ('asset with this name exist')
+            bpy.ops.spamerror.message('INVOKE_DEFAULT', 
+                type = "Error",
+                message = 'asset with this name exist')
             return {'FINISHED'}
 
         result = self.logindata.conn.asset.checkout(

@@ -1,4 +1,4 @@
-#import bpy
+import bpy
 from . import spamhelper
 from . import blender_helper
 
@@ -57,7 +57,9 @@ class save_new_asset(spamhelper.SaveToSpamHelper):
                         asset_path['project'], container_type, shot_id,
                         asset_path['category'], asset_path['name'], comment=self.comment )
         else:
-            print ('asset with this name exist')
+            bpy.ops.spamerror.message('INVOKE_DEFAULT', 
+                type = "Error",
+                message = 'asset with this name exist')
             return {'FINISHED'}
         
         result = self.logindata.conn.asset.checkout(

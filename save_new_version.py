@@ -1,4 +1,4 @@
-#import bpy
+import bpy
 
 from . import spamhelper
 import os
@@ -23,7 +23,9 @@ class save_new_version(spamhelper.SaveToSpamHelper):
             if result['owner']['user_name']:
                 owner = result['owner']['user_name']
         if not owner or owner != self.logindata.name:
-            print ('you don\'t own this asset')
+            bpy.ops.spamerror.message('INVOKE_DEFAULT', 
+                type = "Error",
+                message = 'you don\'t own this asset!!')
             return {'FINISHED'}
         
         # create and submite all dependencies asset

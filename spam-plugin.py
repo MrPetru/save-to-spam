@@ -11,8 +11,8 @@ import sys
 
 sys.path.append(os.path.join(gimp.plug_in_directory,'plug-ins'))
 
-import helpfiles
-from helpfiles import spamclient, save_new_version, logintospam, save_alt_version, spamhelper
+import spamhelpfiles
+from spamhelpfiles import spamclient, save_new_version, logintospam, save_alt_version, spamhelper
 
 
 gettext.install("gimp20-python", gimp.locale_directory, unicode=True)
@@ -81,16 +81,18 @@ class mytestclass(save_alt_version.save_alt_version,
                 self.actions = '1'
                 img_name =main_file_path[main_file_path.rfind('/')+1:main_file_path.rfind('.')]
                 img_ext = main_file_path[main_file_path.rfind('.')+1:]
-                self.alternative_name = img_name.replace('_TEX', '') + '_' +altname #+ new_type
+                category = main_file_path[main_file_path.rfind('_'):main_file_path.rfind('.')]
+                self.alternative_name = img_name.replace(category, '') + '_' +altname #+ new_type
                 
-                new_main_file_path = main_file_path[:main_file_path.rfind('/')+1] + self.alternative_name + '_TEX.' + new_type
+                new_main_file_path = main_file_path[:main_file_path.rfind('/')+1] + self.alternative_name + category + '.' + new_type
                 
                 image2 = image.duplicate()
-                image2.merge_visible_layers(2)
+                if new_type != 'xcf':
+                    image2.merge_visible_layers(2)
                 #new_file_name = filename[:filename.rfind('.')+1]+new_type
                 #pdb.file_png_save(image2, image2.active_drawable, filename+'.png', filename+'.png', False, 9, True, False, False, False, True)
-                #pdb.gimp_file_save(image2, image2.active_drawable, new_main_file_path, new_main_file_path)
-                pdb.file_png_save(image2, image2.active_drawable, new_main_file_path, new_main_file_path, False, 9, True, False, False, False, True)
+                pdb.gimp_file_save(image2, image2.active_drawable, new_main_file_path, new_main_file_path)
+                #pdb.file_png_save(image2, image2.active_drawable, new_main_file_path, new_main_file_path, False, 9, True, False, False, False, True)
                 
                 sc_or_lib = self.scene_or_library()
                 asset_path = self.get_asset_path()
@@ -114,7 +116,7 @@ class mytestclass(save_alt_version.save_alt_version,
                 # verifica se gia esiste il asset con questo nome
                 new_asset_path = dict(asset_path)
                 #new_asset_path['category'] = 'texture'
-                new_asset_path['name'] = self.alternative_name + '_TEX.'+ new_type
+                new_asset_path['name'] = self.alternative_name + category +'.'+ new_type
                 new_asset_id, new_shot_id = self.recreate_asset_id(asset_path=new_asset_path)
                 
                 asset_exist = True

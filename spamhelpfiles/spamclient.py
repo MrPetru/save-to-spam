@@ -44,8 +44,11 @@ class MultipartPostHandler(urllib2.BaseHandler):
         data = request.get_data()
         if data is None or isinstance(data, basestring):
             return request
-        
         files = [v for v in data.itervalues() if isinstance(v, file)]
+        if not files:
+            for v in data.itervalues():
+                if isinstance(v, list):
+                    files = v
         if files:
             boundary, data = self.multipart_encode(data.iteritems())
             contenttype = 'multipart/form-data; boundary=%s' % boundary
@@ -75,6 +78,21 @@ class MultipartPostHandler(urllib2.BaseHandler):
                 buf.write('Content-Length: %s\r\n' % file_size)
                 value.seek(0)
                 buf.write('\r\n' + value.read() + '\r\n')
+            elif isinstance(value, list):
+                for f in value:
+                    if isinstance(f, file):
+                        file_size = os.fstat(f.fileno())[stat.ST_SIZE]
+                        dirname, filename = os.path.split(f.name)
+                        contenttype = (mimetypes.guess_type(filename)[0] or
+                                                            'application/octet-stream')
+                        buf.write('--%s\r\n' % boundary)
+                        buf.write('Content-Disposition: form-data; name="%s"; '
+                                                'filename="%s"\r\n' % (key, filename))
+                        buf.write('Content-Type: %s\r\n' % contenttype)
+                        buf.write('Content-Length: %s\r\n' % file_size)
+                        f.seek(0)
+                        buf.write('\r\n' + f.read() + '\r\n')
+                        
             else:
                 buf.write('--%s\r\n' % boundary)
                 buf.write('Content-Disposition: form-data; name="%s"' % key)

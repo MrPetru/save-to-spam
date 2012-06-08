@@ -25,7 +25,7 @@ if "bpy" in locals():
 
 import bpy
 from bpy.props import FloatVectorProperty
-from add_utils import AddObjectHelper, add_object_data
+#from add_utils import AddObjectHelper, add_object_data
 from mathutils import Vector
 
 #from bpy_extras.io_utils import ExportHelper

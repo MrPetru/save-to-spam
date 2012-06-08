@@ -150,15 +150,16 @@ class SaveToSpamHelper():
                     result = self.logindata.adminconn.asset.new(
                                 new_asset_path['project'], container_type, new_shot_id,
                                 'texture', new_asset_path['name'] )
-                    #print (result)
                 result = self.logindata.conn.asset.checkout(
                             new_asset_path['project'], new_asset_id)
                 result = self.logindata.conn.upload(open(img.absolute_path, 'rb'))
                 result = self.logindata.conn.asset.publish(
                             new_asset_path['project'], new_asset_id, img_name+'.'+img_ext)
+                            
                 # subbmit for revision
-                result = self.logindata.conn.asset.submit(new_asset_path['project'],
-                            new_asset_id, comment='auto subbmision')
+                result = self.logindata.conn.asset.submit(proj=new_asset_path['project'],
+                            asset_id=new_asset_id, sender=self.logindata.name, uploaded='',
+                            receiver=None, comment='auto submitted from blender')
                 # release
                 result = self.logindata.conn.asset.release(new_asset_path['project'],
                                 new_asset_id)

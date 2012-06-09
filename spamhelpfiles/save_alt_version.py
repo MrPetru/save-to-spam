@@ -93,8 +93,9 @@ class save_alt_version(spamhelper.SaveToSpamHelper):
                             new_asset_path['project'], new_asset_id, new_main_file_path[new_main_file_path.rfind('/')+1:])
         
         if (self.submit_for_rev):
-            result = self.logindata.conn.asset.submit(new_asset_path['project'],
-                                new_asset_id, comment=self.comment)
+            result = self.logindata.conn.asset.submit(proj=new_asset_path['project'],
+                                asset_id=new_asset_id,sender=self.logindata.name,
+                                uploaded=[], comment=self.comment)
         if (self.release):
             result = self.logindata.conn.asset.release(new_asset_path['project'],
                                 new_asset_id)

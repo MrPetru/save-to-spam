@@ -691,7 +691,7 @@ class Asset(object):
         return json.loads(result.read())##['version']
 
     
-    def submit(self, proj, asset_id, comment=None):
+    def submit(self, proj, asset_id, sender, uploaded, receiver, comment=None):
         """Submit an asset to supervisors for approval.
 
         Returns:

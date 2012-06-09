@@ -157,8 +157,9 @@ class SaveToSpamHelper():
                 result = self.logindata.conn.asset.publish(
                             new_asset_path['project'], new_asset_id, img_name+'.'+img_ext)
                 # subbmit for revision
-                result = self.logindata.conn.asset.submit(new_asset_path['project'],
-                            new_asset_id, comment='auto subbmision')
+                result = self.logindata.conn.asset.submit(proj=new_asset_path['project'],
+                            asset_id=new_asset_id, sender=self.logindata.name,
+                            uploaded=[], comment='auto subbmision')
                 # release
                 result = self.logindata.conn.asset.release(new_asset_path['project'],
                                 new_asset_id)

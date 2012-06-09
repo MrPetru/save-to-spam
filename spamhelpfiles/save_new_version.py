@@ -37,8 +37,9 @@ class save_new_version(spamhelper.SaveToSpamHelper):
                                 asset_id, main_file_path, comment=self.comment)
                                 
         if (self.submit_for_rev):
-            result = self.logindata.conn.asset.submit(asset_path['project'],
-                                asset_id, comment=self.comment)
+            result = self.logindata.conn.asset.submit(proj=asset_path['project'],
+                                asset_id=asset_id, sender=self.logindata.name,
+                                uploaded=[], comment=self.comment)
         if (self.release):
             result = self.logindata.conn.asset.release(asset_path['project'],
                                 asset_id)

@@ -31,7 +31,7 @@ class SpamLocalServer(SocketServer.BaseRequestHandler):
             # open file
             
             # get file extension
-            file_ext = file_path[file_path.rfind('.')+1:]
+            file_ext = (file_path[file_path.rfind('.')+1:]).lower()
             print (file_ext)
             if file_ext in ['shk']:
                 # open with blender
@@ -44,6 +44,10 @@ class SpamLocalServer(SocketServer.BaseRequestHandler):
             if file_ext in ['jpg', 'png', 'xcf', 'tif']:
                 # open with gimp
                 os.system('gimp %s' % os.path.join(local_repository, file_path))
+                
+            if file_ext in ['mov', 'mp4', 'avi', 'm2v', 'mts', 'mxf']:
+                # open with vlc
+                os.system('vlc -f --play-and-exit %s' % os.path.join(local_repository, file_path))
                 
             #self.request.send(file_path)
             self.request.send('')

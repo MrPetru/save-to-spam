@@ -233,6 +233,7 @@ class SaveToSpam(bpy.types.Operator, save_alt_version.save_alt_version,
 #                type = "Error",
 #                message = 'Found one error!')
 #        return {'FINISHED'}
+        self.file_path = bpy.data.filepath
         
         if self.logindata.name == None:
             return {'FINISHED'}
